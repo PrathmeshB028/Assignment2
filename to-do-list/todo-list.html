@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 380px;
+            max-width: calc(100% - 50px);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #d1d5db;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2563eb;
+            margin-top: 0;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .task-text {
+            flex: 1;
+            overflow-wrap: anywhere;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        .complete-btn {
+            background: #16a34a;
+        }
+
+        .complete-btn:hover {
+            background: #15803d;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+        #emptyMessage {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>My To-Do List</h2>
+
+        <div class="input-area">
+            <input type="text" id="taskInput"
+                   placeholder="Enter a task">
+
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <p id="emptyMessage">No tasks yet. Add your first task!</p>
+
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            let input = document.getElementById("taskInput");
+            let task = input.value.trim();
+
+            if (task === "") {
+                alert("Please enter a task!");
+                return;
+            }
+
+            let li = document.createElement("li");
+            let span = document.createElement("span");
+
+            span.textContent = task;
+            span.className = "task-text";
+
+            let completeBtn = document.createElement("button");
+            completeBtn.textContent = "Done";
+            completeBtn.className = "complete-btn";
+
+            completeBtn.onclick = function () {
+                span.classList.toggle("completed");
+
+                completeBtn.textContent =
+                    span.classList.contains("completed")
+                    ? "Undo" : "Done";
+            };
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.className = "delete-btn";
+
+            deleteBtn.onclick = function () {
+                li.remove();
+                updateMessage();
+            };
+
+            li.appendChild(span);
+            li.appendChild(completeBtn);
+            li.appendChild(deleteBtn);
+
+            document.getElementById("taskList").appendChild(li);
+
+            input.value = "";
+            updateMessage();
+            input.focus();
+        }
+
+        function updateMessage() {
+            let list = document.getElementById("taskList");
+            let message = document.getElementById("emptyMessage");
+
+            message.style.display =
+                list.children.length === 0 ? "block" : "none";
+        }
+
+        document.getElementById("taskInput")
+            .addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    addTask();
+                }
+            });
+    </script>
+
+</body>
+</html>
